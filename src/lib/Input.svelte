@@ -18,7 +18,7 @@
 	}
 </script>
 
-<textarea id="input-area" on:input={autoResize} placeholder="Type here..."></textarea>
+<textarea id="input-area" on:input={autoResize} autofocus placeholder="Type here..."></textarea>
 
 <style>
 	#input-area {
