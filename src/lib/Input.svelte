@@ -18,7 +18,7 @@
 	}
 </script>
 
-<textarea id="input-area" on:input={autoResize} autofocus placeholder="Type here..."></textarea>
+<textarea id="input-area" on:input={autoResize} placeholder="Type here..."></textarea>
 
 <style>
 	#input-area {
@@ -32,7 +32,7 @@
 		resize: none;
 
 		/* Apply custom styling */
-		font-size: clamp(14px, 5vw, 50px);
+		font-size: 5vw;
 		line-height: 1.5;
 		padding: 1rem;
 		box-sizing: border-box;
