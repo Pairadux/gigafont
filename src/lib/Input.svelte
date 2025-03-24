@@ -18,7 +18,8 @@
 	}
 </script>
 
-<textarea id="input-area" on:input={autoResize} placeholder="Type here..."></textarea>
+<!-- svelte-ignore a11y_autofocus -->
+<textarea id="input-area" autofocus on:input={autoResize} placeholder="Type here..."></textarea>
 
 <style>
 	#input-area {
