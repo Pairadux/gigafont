@@ -1,49 +1,67 @@
 <script lang="ts">
-	//let text = 'Start typing...';
-	function autoResize(event: Event) {
-		const textArea = event.target as HTMLTextAreaElement;
-		const maxHeight = window.innerHeight * 0.75; // 75% of the viewport height
+	import { onMount } from 'svelte';
+	import { browser } from '$app/environment';
+	import { fontSize } from './store.svelte';
 
-		// Reset the height so it can shrink when text is removed
-		textArea.style.height = 'auto';
+	let textarea: HTMLTextAreaElement;
 
-		// If the content exceeds maxHeight, cap the height and enable vertical scrolling
-		if (textArea.scrollHeight > maxHeight) {
-			textArea.style.height = maxHeight + 'px';
-			textArea.style.overflowY = 'auto';
-		} else {
-			textArea.style.height = textArea.scrollHeight + 'px';
-			textArea.style.overflowY = 'hidden';
-		}
+	function autoResize() {
+		if (!textarea) return;
+		const maxH = window.innerHeight * 0.8;
+
+		textarea.style.height = 'auto';
+		const h = Math.min(textarea.scrollHeight, maxH);
+		textarea.style.height = h + 'px';
+		textarea.style.overflowY = textarea.scrollHeight > maxH ? 'auto' : 'hidden';
+	}
+
+	// 1) Initial client‑only sizing
+	onMount(() => {
+		autoResize();
+	});
+
+	// 2) Whenever fontSize.value changes, rerun autoResize (client only)
+	$: if (browser) {
+		fontSize.value; // subscribe to store change
+		// schedule in next microtask so DOM style has updated
+		Promise.resolve().then(autoResize);
 	}
 </script>
 
-<!-- svelte-ignore a11y_autofocus -->
-<textarea id="input-area" autofocus on:input={autoResize} placeholder="Type here..."></textarea>
+<div class="wrapper">
+	<!-- svelte-ignore a11y_autofocus -->
+	<textarea
+		bind:this={textarea}
+		autofocus
+		placeholder="Type here…"
+		on:input={autoResize}
+		style="font-size: {fontSize.value}vw;"
+	></textarea>
+</div>
 
 <style>
-	#input-area {
-		/* Reset most of the default styles */
-		appearance: none;
-		-webkit-appearance: none;
-		border: none;
-		outline: none;
-		background: transparent;
-		box-shadow: none;
-		resize: none;
-
-		/* Apply custom styling */
-		font-size: 5vw;
-		line-height: 1.5;
-		padding: 1rem;
-		box-sizing: border-box;
+	.wrapper {
+		display: flex;
+		align-items: center;
+		justify-content: center;
+		height: 80vh;
 		width: 100%;
-		max-width: 75%;
-
-		/* Inherit fonts/colors from your design */
+	}
+	textarea {
+		width: 100%;
+		max-width: 90%;
+		max-height: 80%;
+		resize: none;
+		padding: 1rem;
+		line-height: 1.5;
+		box-sizing: border-box;
 		font-family: inherit;
 		color: inherit;
-
+		background: transparent;
+		border: none;
+		outline: none;
 		text-align: center;
+		overflow-wrap: break-word;
+		overflow-y: hidden;
 	}
 </style>

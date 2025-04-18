@@ -1,5 +1,5 @@
 <script lang="ts">
-	import { darkMode, toggleDarkMode } from './darkMode.svelte';
+	import { darkMode, toggleDarkMode } from './store.svelte';
 	import { assets } from '$app/paths';
 </script>
 
